@@ -29,6 +29,14 @@ If installation is successful, you should see the following:
 
 Notice that the model itself will handle the RGB to BGR operation for you. And please be care about your input scale and datatype.
 
+### Generate video
+
+Run the commond: python generate_video1.py --fullname src_video.mp4 -- mode 'color'
+
+Here, 'src_video.mp4' is the full name(include the format) of the source video. 
+And 'mode' is the way how to generate video: 'color' means generating colorful results which contain both horizontal and vertical optical flow; 'bk' means the results only contain horizontal optical flow which can be treated as horizontal parallax in some cases.
+
+
 ### Performance (w/o fine-tuning)
 
 | Model       | KITTI2012 Train EPE     |  KITTI2015 Train EPE     |  KITTI2015 Train F1     |  Sintel Final Train EPE |
