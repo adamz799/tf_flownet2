@@ -27,7 +27,7 @@ You must have CUDA installed: `make all`
 
 Add by adamz799:
 
-I change the above line to suits different GPUs ([like this])(https://github.com/adamz799/tf_flownet2/Makefile#13). Some GPUs like GV100 whose compute capability is 7.0 are not fully supported by CUDA8(6.1). To run the code on these GPUs, setting 'gpucflag' to default is feasible.
+I change the above line to suits different GPUs [like this](https://github.com/adamz799/tf_flownet2/Makefile#13). Some GPUs like GV100 whose compute capability is 7.0 are not fully supported by CUDA8(6.1). To run the code on these GPUs, setting 'gpucflag' to default is feasible.
 
 On the other hand, this fork use OpenCV to deal with videos, so OpenCV Python version is needed.
 ```
