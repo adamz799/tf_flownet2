@@ -4,15 +4,28 @@ This repo includes FlowNetC, S, CS, CSS, CSS-ft-sd, SD, and 2 for TensorFlow. Mo
 * It can deal with arbitrary size of input now.
 * After installation, just copy the whole folder `FlowNet2_src` to your codebase to use. See `demo.py` for details.
 
+### Generate video
+This fork is for generating optical flow videos
+Run the commond: 
+```
+python generate_video1.py --fullname src_video.mp4 -- mode 'color'
+```
+
+Here, 'src_video.mp4' is the full name(include the format) of the source video. 
+And 'mode' is the way how to generate video: 'color' means generating colorful results which contain both horizontal and vertical optical flow; 'bk' means the results only contain horizontal optical flow which can be treated as horizontal parallax in some cases.
+
 ### Environment
 
-This code has been tested with Python3.6 and TensorFlow1.2.0, with a Tesla K80 GPU. The system is Ubuntu 14.04.
+This code has been tested with Python2.7 and TensorFlow1.2.1 based on CUDA8.0 and CuDNN5.1, with single GTX1060. The system is Ubuntu 16.04.
 
 ### Installation
 
 You must have CUDA installed: `make all`
 
 **Note:** you might need to modify [this line](https://github.com/vt-vl-lab/tf_flownet2/blob/master/Makefile#L13), according to the GPU you use.
+
+Add by adamz799:
+Acrroding to my experience, I change the above line to suits different GPUs[this line](https://github.com/adamz799/tf_flownet2/Makefile#13). Some GPU like GV100 whose compute capability is 7.0 are not fully supported by CUDA8(6.1). To run the code on these GPUs, setting gpucflag to default is feasible.
 
 ### Download weights
 To download the weights for all models (4.4GB), run the `download.sh` script in the `FlowNet2_src/checkpoints` directory. All test scripts rely on these checkpoints to work properly.
@@ -28,16 +41,6 @@ If installation is successful, you should see the following:
 ![FlowNet2 Sample Prediction](/FlowNet2_src/example/0flow-pred-flownet2.png?raw=true)
 
 Notice that the model itself will handle the RGB to BGR operation for you. And please be care about your input scale and datatype.
-
-### Generate video
-
-Run the commond: 
-```
-python generate_video1.py --fullname src_video.mp4 -- mode 'color'
-```
-
-Here, 'src_video.mp4' is the full name(include the format) of the source video. 
-And 'mode' is the way how to generate video: 'color' means generating colorful results which contain both horizontal and vertical optical flow; 'bk' means the results only contain horizontal optical flow which can be treated as horizontal parallax in some cases.
 
 
 ### Performance (w/o fine-tuning)
