@@ -25,7 +25,13 @@ You must have CUDA installed: `make all`
 **Note:** you might need to modify [this line](https://github.com/vt-vl-lab/tf_flownet2/blob/master/Makefile#L13), according to the GPU you use.
 
 Add by adamz799:
-Acrroding to my experience, I change the above line to suits different GPUs[this line](https://github.com/adamz799/tf_flownet2/Makefile#13). Some GPU like GV100 whose compute capability is 7.0 are not fully supported by CUDA8(6.1). To run the code on these GPUs, setting gpucflag to default is feasible.
+
+I change the above line to suits different GPUs ([like this])(https://github.com/adamz799/tf_flownet2/Makefile#13). Some GPUs like GV100 whose compute capability is 7.0 are not fully supported by CUDA8(6.1). To run the code on these GPUs, setting gpucflag to default is feasible.
+
+On the other hand, this repo use OpenCV to deal with videos, so OpenCV Python version is needed.
+```
+pip install opencv-python
+```
 
 ### Download weights
 To download the weights for all models (4.4GB), run the `download.sh` script in the `FlowNet2_src/checkpoints` directory. All test scripts rely on these checkpoints to work properly.
