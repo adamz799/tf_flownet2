@@ -21,9 +21,9 @@ if __name__ == '__main__':
   src_video = cv2.VideoCapture('testlrv.mp4')
   #right_eye = cv2.VideoCapture('testlrv-right-eye.mp4')
   
-  width = src_video.get(3)/2
-  heigth = src_video.get(4)
-  total_frame = src_video.get(7)
+  width = int(src_video.get(3)/2)
+  height = int(src_video.get(4))
+  total_frame = int(src_video.get(7))
 
   if output_mode == 'bk':
     output_name = 'output-B&W.avi'
@@ -33,13 +33,13 @@ if __name__ == '__main__':
   output_video = cv2.VideoWriter(
     output_name, 
     cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 
-    left_eye.get(cv2.CAP_PROP_FPS), 
-    (width, heigth)
+    src_video.get(cv2.CAP_PROP_FPS), 
+    (width, height)
     )
 
   # Graph construction
-  im1_pl = tf.placeholder(tf.float32, [1, heigth, width, 3])
-  im2_pl = tf.placeholder(tf.float32, [1, heigth, width, 3])
+  im1_pl = tf.placeholder(tf.float32, [1, height, width, 3])
+  im2_pl = tf.placeholder(tf.float32, [1, height, width, 3])
 
   flownet2 = FlowNet2()
   inputs = {'input_a': im1_pl, 'input_b': im2_pl}
@@ -59,21 +59,28 @@ if __name__ == '__main__':
   with tf.Session() as sess:
     saver.restore(sess, ckpt_file)
 
-    while flag:
+    while flag and num<73:
       flag, frame = src_video.read()
       if flag == False:
         print 'Error occurs at frame {}!'.format(num) 
         break
 
       #fSize = frame.shape
-      framel = frame[:, 0:width, :]
-      framel = cv2.resize(framel, (width, height))
-      framer = frame[:, width:, :]
-      framer = cv2.resize(framer, (width, height))
+      framel = frame[:, 0:width,[2, 1, 0]].copy()
+      #cv2.imshow('left',framel)
+      #cv2.waitKey(0)
+      #framel = cv2.resize(framel, (width, height))
+      framer = frame[:, width:,[2, 1, 0]].copy()
+      #cv2.imshow('right',framer)
+      #cv2.waitKey(0)
+      #framer = cv2.resize(framer, (width, height))
 
       im1 = np.array([framel]).astype(np.float32)
       im2 = np.array([framer]).astype(np.float32)
-    
+      if im1.max()>1.0:
+        im1 = im1/255.
+      if im2.max()>1.0:
+        im2 = im2/255.
       feed_dict = {im1_pl: im1, im2_pl: im2}
       pred_flow_val = sess.run(pred_flow, feed_dict=feed_dict)
       # Visualization
@@ -82,29 +89,33 @@ if __name__ == '__main__':
       if output_mode == 'color':
         flow_im = flow_to_image(pred_flow_val[0])     
       else:
-        u, v = cv2.split(pred_flow_val)
-        #print(u.min(), "  ", u.max()) 
-        u[u < 0] = 0
-        u[u > 255] = 0
+        u = pred_flow_val[0][:,:,0]
+        u = -u
+        u = np.where(u>0.,u,0.)
+        u = np.where(u<255.,u,255.)
         eps = 0.001
-        (m, M) = (u.min(), u.max())
-        norm = 1.0 * (u - m) / (M - m) * 128
-        norm[norm > (125 - eps)] = 125 - eps
-        norm[norm < eps] = eps          
-        #norm = np.uint8(u)
-        flow_im = np.uint8(norm)
+        m, M = u.min(), u.max()
+        norm = (u - m) / (M - m) * 128.
+        te = 128-eps
+        norm = np.where(norm>te,te,norm)
+        norm = np.where(norm<eps,eps,norm)          
+        
+        t = np.uint8(norm)
+        #flow_im = cv2.merge([t,t,t])
+        gray = cv2.cvtColor(t, cv2.COLOR_GRAY2BGR)
+        flow_im = np.concatenate((frame[:,0:width,:],gray),axis = 1)
 
+      cv2.imshow('result',flow_im)
+      cv2.waitKey(0)
       output_video.write(flow_im)
-      #plt.imshow(flow_im)
-      #plt.show()
-      print 'Output frame {}'.format(num)
+      
+      print 'Generating %.2f%%' %(num*100./total_frame)
       num+=1
       if num > total_frame:
         print 'Finish!'
         break
 
-  left_eye.release()
-  right_eye.release()
+  src_video.release()
   output_video.release()
 
   
