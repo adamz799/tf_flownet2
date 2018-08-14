@@ -134,10 +134,10 @@ if __name__ == '__main__':
       #plt.show()
       #print 'Output frame {}'.format(num)
       #print 'Finishing %.2f%%' % (num*100./total_frame)
-      print '\rGenerating %.2f%%' % (num*100./total_frame) ,
+      print 'Generating %.2f%%' % (num*100./total_frame) 
       num+=1
       if num > total_frame:
-        print '\nFinish!'
+        print 'Finish!'
         break
 
   src_video.release()
