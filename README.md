@@ -5,7 +5,8 @@ This repo includes FlowNetC, S, CS, CSS, CSS-ft-sd, SD, and 2 for TensorFlow. Mo
 * After installation, just copy the whole folder `FlowNet2_src` to your codebase to use. See `demo.py` for details.
 
 ### Generate video
-This fork is for generating optical flow videos
+This fork is for generating optical flow videos.
+
 Run the commond: 
 ```
 python generate_video1.py --fullname src_video.mp4 -- mode 'color'
@@ -16,7 +17,7 @@ And 'mode' is the way how to generate video: 'color' means generating colorful r
 
 ### Environment
 
-This code has been tested with Python2.7 and TensorFlow1.2.1 based on CUDA8.0 and CuDNN5.1, with single GTX1060. The system is Ubuntu 16.04.
+This code has been tested with Python2.7 and TensorFlow1.2.1 based on CUDA8.0 and CuDNN5.1, with GV100. The system is Ubuntu 16.04.
 
 ### Installation
 
@@ -26,9 +27,9 @@ You must have CUDA installed: `make all`
 
 Add by adamz799:
 
-I change the above line to suits different GPUs ([like this])(https://github.com/adamz799/tf_flownet2/Makefile#13). Some GPUs like GV100 whose compute capability is 7.0 are not fully supported by CUDA8(6.1). To run the code on these GPUs, setting gpucflag to default is feasible.
+I change the above line to suits different GPUs ([like this])(https://github.com/adamz799/tf_flownet2/Makefile#13). Some GPUs like GV100 whose compute capability is 7.0 are not fully supported by CUDA8(6.1). To run the code on these GPUs, setting 'gpucflag' to default is feasible.
 
-On the other hand, this repo use OpenCV to deal with videos, so OpenCV Python version is needed.
+On the other hand, this fork use OpenCV to deal with videos, so OpenCV Python version is needed.
 ```
 pip install opencv-python
 ```
