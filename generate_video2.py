@@ -99,8 +99,8 @@ if __name__ == '__main__':
       #cv2.waitKey(0)
 
       flow_im = np.concatenate((frame[:, 0:width,:].copy(),gray),axis = 1)     
-      cv2.imshow('result',flow_im)
-      cv2.waitKey(0)
+      #cv2.imshow('result',flow_im)
+      #cv2.waitKey(0)
       output_video.write(flow_im)
       
       print 'Generating %.2f%%' % (num*100./total_frame) 
